@@ -112,7 +112,7 @@ curl -sS -X POST http://localhost:8000/api/v1/users/register \
 
 #### 2. 用户登录（使用邮箱）
 ```bash
-curl -i -sS -X POST http://127.0.0.1:8000/api/v1/users/login \
+curl -i -sS -X POST http://localhost:8000/api/v1/users/login \
   -H 'Content-Type: application/json' \
   --data '{"email":"test@example.com"}'
 ```
@@ -136,7 +136,7 @@ export TOKEN="XXX"
 #### 3. 创建提示词（需要api key和token）
 
 ```bash
-curl -sS -X POST http://127.0.0.1:8000/api/v1/prompts/ \
+curl -sS -X POST http://localhost:8000/api/v1/prompts/ \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-API-Key: $API_KEY" \
   -H "Content-Type: application/json" \
