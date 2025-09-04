@@ -18,6 +18,7 @@
 
 ## 📂 项目结构
 
+```bash
 projects/prompt-manager-system/
 └─ backend/
 ├─ .env - 运行环境配置（生产/本地变量）
@@ -60,7 +61,7 @@ projects/prompt-manager-system/
 └─ services/
 ├─ user_service.py - 用户服务
 └─ prompt_service.py - 提示词服务
-
+```
 
 ---
 
@@ -96,7 +97,6 @@ API 文档 (Swagger): http://localhost:8000/docs
 健康检查: http://localhost:8000/health
 
 
---- 这里后面可以继续测试一下
 
 ### 🧪 示例请求
 
@@ -104,8 +104,59 @@ API 文档 (Swagger): http://localhost:8000/docs
 ```bash
 curl -sS -X POST http://localhost:8000/api/v1/users/register \
   -H 'Content-Type: application/json' \
-  --data '{"username":"alice","email":"alice@example.com"}'
+  --data '{"username":"test","email":"test@example.com"}'
+```
+<img width="1381" height="106" alt="edca3482cc9be9ff4b2009b731ecfd0" src="https://github.com/user-attachments/assets/787956d8-6f0e-4c16-bea4-cc737f47b03a" />
+// 自动生成随机ID储存user name
+
+
+#### 2. 用户登录（使用邮箱）
+```bash
+curl -i -sS -X POST http://127.0.0.1:8000/api/v1/users/login \
+  -H 'Content-Type: application/json' \
+  --data '{"email":"test@example.com"}'
+```
+<img width="1376" height="366" alt="image" src="https://github.com/user-attachments/assets/561951fc-84fd-4076-917a-bd9b0456bc91" />
+// 自动生成access token
+
+
+#### 3. 检查API Key和Token的设置
+
+根据.env文件中的API_KEY的全局变量方便测试（可自行修改）：
+```bash
+export API_KEY=“your_test_key”
+```
+
+登录返回 {"access_token":"XXX","token_type":"bearer"}存到环境变量：
+```bash
+export TOKEN="XXX"
 ```
 
 
+#### 3. 创建提示词（需要api key和token）
+
+```bash
+curl -sS -X POST http://127.0.0.1:8000/api/v1/prompts/ \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "X-API-Key: $API_KEY" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "title": "测试用",
+    "content": "请以{{theme}}为主题创作",
+    "tags": ["中药"],
+    "category": "医学",
+    "variables": ["theme"]
+  }'
+```
+<img width="1445" height="264" alt="image" src="https://github.com/user-attachments/assets/17df12a0-205e-4ab3-bdeb-bc7cbd2933aa" />
+
+
+
+### 检查postgreSQL数据库
+
+<img width="1880" height="789" alt="1756998842969" src="https://github.com/user-attachments/assets/7fa30211-bf0b-4b34-8ee7-f0a2cb7c9ffe" />
+
+连接成功已储存
+
+//测试与开发阶段使用本地postgreSQL进行调试，可在.env环境设置文件中进行修改。
 
