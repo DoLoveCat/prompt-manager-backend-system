@@ -19,22 +19,38 @@ from app.schemas.user import UserCreate
 import secrets
 
 
+# API key生成
+from fastapi import HTTPException                   
+from secrets import token_urlsafe                   
+
+
+# 唯一 API Key 生成器
+async def _gen_unique_api_key(db: AsyncSession) -> str:
+    for _ in range(5):
+        candidate = token_urlsafe(32)
+        exists = await db.execute(select(User.id).where(User.api_key == candidate))
+        if exists.scalar_one_or_none() is None:
+            return candidate
+    return token_urlsafe(48)
+
+
 #创建用户
 async def create_user(db: AsyncSession, user_in: UserCreate) -> User:
     new_user = User(
-        id=uuid.uuid4(),
+        # id=uuid.uuid4(),
         # 修改一下，User.id 是 UUID 主键
-        # id=uuid4(),
+        id=uuid4(),
         username=user_in.username,
         email=user_in.email,
-        api_key="temp_key"  # 先用着测试，之后再加API Key生成逻辑
+        # api_key="temp_key"  # 先用着测试，之后再加API Key生成逻辑
+        api_key = getattr(user_in, "api_key", None) or await _gen_unique_api_key(db)
     )
     db.add(new_user)
     try:
         await db.commit()
     except IntegrityError:
         await db.rollback()
-        raise
+        raise HTTPException(status_code=409, detail="username/email/api_key already exists")
     await db.refresh(new_user)
     return new_user
 

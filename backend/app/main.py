@@ -84,9 +84,9 @@ app.include_router(prompts.router, prefix="/api/v1/prompts", tags=["prompts"])
 
 
 # 在 main.py 中分开挂：
-from app.api import mcp
-app.include_router(api_router, prefix=settings.API_V1_STR)
-app.include_router(mcp_router)
+# from app.api import mcp
+# app.include_router(api_router, prefix=settings.API_V1_STR)
+# app.include_router(mcp_router)
 
 
 # 打印DATABASE_URL

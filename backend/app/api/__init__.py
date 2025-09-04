@@ -19,6 +19,6 @@ api_router.include_router(prompts.router)
 
 
 # 挂载 MCP，独立前缀
-# MCP还没写完，先挂着吧
-mcp_router = APIRouter()
-mcp_router.include_router(mcp.router, prefix="/mcp", tags=["mcp"])
+# MCP还没写完
+# mcp_router = APIRouter()
+# mcp_router.include_router(mcp.router, prefix="/mcp", tags=["mcp"])
